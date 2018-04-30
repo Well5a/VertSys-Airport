@@ -24,10 +24,20 @@ public class Runway implements Serializable {
 	
 	private String name;
 	
+	private Airplane airplane;
+	
+	public Airplane getAirplane() {
+		return airplane;
+	}
+
+	public void setAirplane(Airplane airplane) {
+		this.airplane = airplane;
+	}
+
 	public String getName() {
 		return name;
 	}
-
+	
 	public void setName(String name) {
 		this.name = name;
 	}
