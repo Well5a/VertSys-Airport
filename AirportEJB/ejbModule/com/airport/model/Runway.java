@@ -20,7 +20,7 @@ public class Runway implements Serializable {
 	@GeneratedValue
 	private long Id;
 	
-	private boolean isUsed;
+	private boolean isLocked;
 	
 	private String name;
 	
@@ -32,12 +32,12 @@ public class Runway implements Serializable {
 		this.name = name;
 	}
 
-	public boolean isUsed() {
-		return isUsed;
+	public boolean getIsLocked() {
+		return isLocked;
 	}
 
-	public void setUsed(boolean isUsed) {
-		this.isUsed = isUsed;
+	public void setIsLocked(boolean isUsed) {
+		this.isLocked = isUsed;
 	}
 
 	public long getId() {
