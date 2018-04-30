@@ -27,7 +27,9 @@
 			<p:column headerText="ETA">
 				<h:inputText value="#{airplane.estimatedArrivalTime}" update="airplaneTableForm" />
 			</p:column>
-			<p:commandButton value="Add airplane" action="#{airportBean.store}" update="airplaneTableForm" />	
+			<p:column headerText="ETA">
+				<p:commandButton value="Add airplane" action="#{airportBean.store}" update="airplaneTableForm" />
+			</p:column>	
 		</p:dataTable>
 	</h:form>
 	
