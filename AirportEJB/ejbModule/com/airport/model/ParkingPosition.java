@@ -3,10 +3,13 @@ package com.airport.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-
-@NamedQuery(name="parkingposition.findAll", query="select a from ParkingPosition a order by a.name")
-
+@NamedQueries ({
+	@NamedQuery(name="parkingposition.findAll", query="select a from ParkingPosition a order by a.name"),
+	@NamedQuery(name="parkingposition.findByName", query="select a from ParkingPosition a where a.name = :name"),
+	@NamedQuery(name="parkingposition.findFree", query="select a from ParkingPosition a where a.isLocked = false")
+})
 @Entity
 public class ParkingPosition {
 	

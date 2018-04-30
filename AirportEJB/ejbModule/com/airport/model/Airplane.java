@@ -13,9 +13,11 @@ public class Airplane {
 	@Id
 	@GeneratedValue
 	private long id;
-	
+	private String icao;
+	private Airline airline;
 	private String name;
 
+	
 	public long getId() {
 		return id;
 	}
@@ -24,11 +26,28 @@ public class Airplane {
 		this.id = id;
 	}
 
+	public String getIcao() {
+		return icao;
+	}
+
+	public void setIcao(String icao) {
+		this.icao = icao;
+	}
+	
+	public Airline getAirline() {
+		return airline;
+	}
+
+	public void setAirline(Airline airline) {
+		this.airline = airline;
+	}
+
+	
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	} 
+	}
 }

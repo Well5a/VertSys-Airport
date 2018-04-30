@@ -2,9 +2,12 @@ package com.airport.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+@NamedQueries ({
+	@NamedQuery(name="runway.findAll", query="select a from Runway a order by a.name"),
+	@NamedQuery(name="runway.findByName", query="select a from Runway a where a.name = :name"),
+	@NamedQuery(name="runway.findFree", query="select a from Runway a where a.isLocked = false")
 
-@NamedQuery(name="runway.findAll", query="select a from Runway a order by a.name")
-
+})
 
 /**
  * Entity implementation class for Entity: Runway
