@@ -9,7 +9,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-import com.airport.model.Airplane;
+import com.airport.model.*;
 import com.airport.session.AirportEJB;
 
 @ManagedBean(name="airportBean")
@@ -21,6 +21,7 @@ public class AirportBean implements Serializable {
 	private AirportEJB airportEJB;
 	
 	private Airplane airplane;
+	
 	
 	public AirportBean() {
 		System.out.println("AIRPORT: " + UUID.randomUUID());
@@ -35,6 +36,24 @@ public class AirportBean implements Serializable {
 		return airportEJB.getAirplanes();
 	}
 	
+	public List<Runway> getRunways() {
+		return airportEJB.getRunways();
+	}
+	
+	public List<Runway> getFreeRunways() {
+		return airportEJB.getFreeRunways();
+	}
+	
+	public List<ParkingPosition> getParkingPositions() {
+		return airportEJB.getParkingPositions();
+	}
+	
+	public List<ParkingPosition> getFreeParkingPositions() {
+		return airportEJB.getFreeParkingPositions();
+	}
+	
+	
+	
 	public Airplane getAirplane() {
 		return airplane;
 	}
@@ -43,4 +62,6 @@ public class AirportBean implements Serializable {
 		airportEJB.store(airplane);
 		airplane = new Airplane();
 	}
+	
+	
 }
