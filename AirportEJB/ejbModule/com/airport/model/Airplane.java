@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import java.sql.Timestamp;
 
 @NamedQuery(name="airplane.findAll", query="select a from Airplane a order by a.name")
 
@@ -22,6 +23,18 @@ public class Airplane {
 	
 	private String name;
 	
+	private Timestamp estimatedArrivalTime;
+	
+	public Timestamp getEstimatedArrivalTime() {
+		return estimatedArrivalTime;
+	}
+
+
+	public void setEstimatedArrivalTime(Timestamp estimatedArrivalTime) {
+		this.estimatedArrivalTime = estimatedArrivalTime;
+	}
+
+
 	public Airplane() {
 		super();
 	}
