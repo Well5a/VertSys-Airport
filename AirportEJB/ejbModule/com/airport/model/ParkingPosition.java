@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 @NamedQueries ({
 	@NamedQuery(name="parkingposition.findAll", query="select a from ParkingPosition a order by a.name"),
 	@NamedQuery(name="parkingposition.findByName", query="select a from ParkingPosition a where a.name = :name"),
@@ -21,7 +22,12 @@ public class ParkingPosition {
 	
 	private boolean isLocked;
 	
+	@OneToOne
 	private Airplane airplane;
+	
+	public ParkingPosition() {
+		super();
+	}
 
 	public long getId() {
 		return id;

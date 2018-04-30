@@ -27,6 +27,7 @@ public class Runway implements Serializable {
 	
 	private String name;
 	
+	@OneToOne
 	private Airplane airplane;
 	
 	public Airplane getAirplane() {

@@ -3,6 +3,7 @@ package com.airport.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 
 @NamedQuery(name="airplane.findAll", query="select a from Airplane a order by a.name")
@@ -13,9 +14,17 @@ public class Airplane {
 	@Id
 	@GeneratedValue
 	private long id;
+	
 	private String icao;
+	
+	@ManyToOne
 	private Airline airline;
+	
 	private String name;
+	
+	public Airplane() {
+		super();
+	}
 
 	
 	public long getId() {
@@ -41,7 +50,6 @@ public class Airplane {
 	public void setAirline(Airline airline) {
 		this.airline = airline;
 	}
-
 	
 	public String getName() {
 		return name;

@@ -6,6 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+
+import com.airport.model.Airplane;
 
 @NamedQuery(name="airplanearrivallog.findAll", query="select a from AirplaneArrivalLog a order by a.id")
 
@@ -20,13 +23,19 @@ public class AirplaneArrivalLog {
 	
 	private Timestamp realArrivalTime;
 	
+	@OneToOne
 	private Airplane airplane;
 	
+	@OneToOne
 	private Runway runway;
 
+	@OneToOne
 	private ParkingPosition parkingPosition;
 	
-
+	public AirplaneArrivalLog() {
+		super();
+	}
+	
 	public long getId() {
 		return id;
 	}
@@ -50,14 +59,6 @@ public class AirplaneArrivalLog {
 	public void setRealArrivalTime(Timestamp realArrivalTime) {
 		this.realArrivalTime = realArrivalTime;
 	}
-
-	public Airplane getName() {
-		return airplane;
-	}
-
-	public void setName(Airplane airplane) {
-		this.airplane = airplane;
-	} 
 	
 	public Airplane getAirplane() {
 		return airplane;
