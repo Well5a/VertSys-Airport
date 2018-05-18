@@ -21,11 +21,17 @@ public class Runway implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private long Id;
+	private long id;
 	
 	private boolean isLocked;
 	
 	private String name;
+	
+	public Runway(long id, boolean isLocked, String name) {
+		this.id = id;
+		this.isLocked = isLocked;
+		this.name = name;
+	}	
 	
 	@OneToOne
 	private Airplane airplane;
@@ -55,11 +61,11 @@ public class Runway implements Serializable {
 	}
 
 	public long getId() {
-		return Id;
+		return id;
 	}
 
 	public void setId(long id) {
-		Id = id;
+		id = id;
 	}
 
 	public Runway() {

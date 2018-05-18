@@ -2,6 +2,7 @@ package com.airport.web.bean;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +23,9 @@ public class AirportBean implements Serializable {
 	
 	private Airplane airplane;
 	
+	private String runway;
+	
+	private ParkingPosition parkingPosition;
 	
 	public AirportBean() {
 		System.out.println("AIRPORT: " + UUID.randomUUID());
@@ -30,8 +34,20 @@ public class AirportBean implements Serializable {
 	@PostConstruct
 	private void init() {
 		airplane = new Airplane();
+		parkingPosition = new ParkingPosition();
 	}
 	
+	public String getRunway() {
+		return runway;
+	}
+
+	public void setRunway(String runway) {
+		this.runway = runway;
+		// if runway != null
+		
+		System.out.println("Hallo, Welt!");
+	}
+
 	public List<Airplane> getAirplanes() {
 		return airportEJB.getAirplanes();
 	}
@@ -52,8 +68,6 @@ public class AirportBean implements Serializable {
 		return airportEJB.getFreeParkingPositions();
 	}
 	
-	
-	
 	public Airplane getAirplane() {
 		return airplane;
 	}
@@ -63,5 +77,21 @@ public class AirportBean implements Serializable {
 		airplane = new Airplane();
 	}
 	
+	public void store(Airplane airplane) {
+		airportEJB.store(airplane);
+		
+		System.out.println("ID:" + airplane.getId() + " Name:" + airplane.getName() + " Runway:" + airplane.getRunway() + " ETA:" + airplane.getEstimatedArrivalTime());
+		System.out.println(this.airplane.getEstimatedArrivalTime());
+		airplane = new Airplane();
+	}
 	
+	// wird nicht aufgerufen?
+	public String getEstimatedArrivalTime() {
+		return "sdfasdfasdfasdf";
+	}
+	
+	public void setEstimatedArrivalTime(String time) {
+		System.out.println("asdfasdfasdfasdfasdf");
+		airplane.setEstimatedArrivalTime(time);		
+	}
 }

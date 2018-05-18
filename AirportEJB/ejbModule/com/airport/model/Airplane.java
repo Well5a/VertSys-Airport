@@ -1,13 +1,21 @@
 package com.airport.model;
 
+import javax.ejb.EJB;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import java.sql.Timestamp;
+import javax.persistence.SqlResultSetMapping;
 
-@NamedQuery(name="airplane.findAll", query="select a from Airplane a order by a.name")
+import com.airport.session.AirportEJB;
+
+@NamedQueries({
+	@NamedQuery(name="airplane.findAll", query="select a from Airplane a order by a.name"),
+	@NamedQuery(name="airplane.updatebyid", query="UPDATE Airplane a SET a.estimatedArrivalTime= param1 WHERE a.id= :param2") //, resultSetMapping = "updateResult")
+})
 
 @Entity
 public class Airplane {
@@ -18,19 +26,26 @@ public class Airplane {
 	
 	private String icao;
 	
+	//@EJB
+	//private AirportEJB airportEJB;
+	
 	@ManyToOne
 	private Airline airline;
 	
+	private String runway;
+	
 	private String name;
 	
-	private Timestamp estimatedArrivalTime;
+	private String estimatedArrivalTime = "0";
 	
-	public Timestamp getEstimatedArrivalTime() {
+	public String getEstimatedArrivalTime() {
 		return estimatedArrivalTime;
 	}
 
 
-	public void setEstimatedArrivalTime(Timestamp estimatedArrivalTime) {
+	public void setEstimatedArrivalTime(String estimatedArrivalTime) {
+		//airportEJB.updateEAT(this.id, estimatedArrivalTime);
+		System.out.println("Hallo" + estimatedArrivalTime);
 		this.estimatedArrivalTime = estimatedArrivalTime;
 	}
 
@@ -70,5 +85,14 @@ public class Airplane {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void setRunway(String runway) {
+		this.runway = runway;
+	}
+	
+	public String getRunway()
+	{
+		return runway;
 	}
 }

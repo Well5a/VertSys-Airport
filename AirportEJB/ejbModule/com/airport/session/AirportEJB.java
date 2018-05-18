@@ -7,6 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.jboss.resteasy.spi.metadata.SetterParameter;
+
 import com.airport.model.Airplane;
 import com.airport.model.ParkingPosition;
 import com.airport.model.Runway;
@@ -28,8 +30,21 @@ public class AirportEJB {
 	}
 
 	public void store(Airplane airplane) {
-		entityManager.persist(airplane);
+		if (airplane.getId() == 0) {
+			entityManager.persist(airplane);
+		} else {
+			entityManager.merge(airplane);
+		}
 	}
+	
+	/*
+	public void updateEAT(long id, String eat)	{
+		Query query = entityManager.createNamedQuery("airplane.updatebyid")
+									.setParameter("param1", id)
+									.setParameter("param2", eat);
+		query.getResultList();
+		System.out.println("id: " + id + " eat: " + eat);
+	}*/
 	
 	// -------------------------- Runways ------------------------------------
 	@SuppressWarnings("unchecked")
