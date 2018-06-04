@@ -27,14 +27,21 @@ public class Runway implements Serializable {
 	
 	private String name;
 	
+	@OneToOne
+	private Airplane airplane;
+	
+	public Runway() {
+		super();
+	}
+	
 	public Runway(long id, boolean isLocked, String name) {
+		super();
 		this.id = id;
 		this.isLocked = isLocked;
 		this.name = name;
-	}	
+	}
 	
-	@OneToOne
-	private Airplane airplane;
+	
 	
 	public Airplane getAirplane() {
 		return airplane;
@@ -65,11 +72,9 @@ public class Runway implements Serializable {
 	}
 
 	public void setId(long id) {
-		id = id;
+		this.id = id;
 	}
 
-	public Runway() {
-		super();
-	}
+	
    
 }

@@ -70,6 +70,14 @@ public class AirportEJB {
 		entityManager.persist(runway);
 	}
 	
+	public void storeRunway(Runway runway) {
+		if (runway.getId() == 0) {
+			entityManager.persist(runway);
+		} else {
+			entityManager.merge(runway);
+		}
+	}
+	
 	
 	// -------------------------- Parking Positions ------------------------------------
 	@SuppressWarnings("unchecked")
@@ -95,5 +103,11 @@ public class AirportEJB {
 		entityManager.persist(parkingPosition);
 	}
 	
-	
+	public void storeParkingPosition(ParkingPosition parkingPosition) {
+		if (parkingPosition.getId() == 0) {
+			entityManager.persist(parkingPosition);
+		} else {
+			entityManager.merge(parkingPosition);
+		}
+	}
 }

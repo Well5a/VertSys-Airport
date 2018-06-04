@@ -29,43 +29,36 @@
 					<h:outputText value="#{airplane.id}" />
 				</p:column>
 				<p:column headerText="Select Runway">
-					<h:selectOneRadio value="#{airplane.runway}">
-						<f:selectItem itemValue="1" itemLabel="R1" />
-						<f:selectItem itemValue="2" itemLabel="R2" />
-						<f:selectItem itemValue="3" itemLabel="R3" />
-						<f:selectItem itemValue="4" itemLabel="R4" />
-					</h:selectOneRadio>
+					<h:selectOneMenu value="#{airplane.runway}">
+						<f:selectItems value="#{airportBean.freeRunways}" var="r" itemLabel="#{r.id}" itemValue="#{r.name}"/>
+					</h:selectOneMenu>
 				</p:column>
-				<!-- <p:column headerText="Estimated Arrival Time">
-					<h:inputText value="#{airplane.estimatedArrivalTime}" update="airplaneTableForm" />
-				</p:column>  -->
 				<p:column headerText="Estimated Arrival Time">
-					<h:outputText value="#{airportBean.airplane.estimatedArrivalTime}" />
-					<p:inputText value="#{airportBean.airplane.estimatedArrivalTime}"/>
+					<h:outputText value="#{airplane.estimatedArrivalTime}" />
+					<p:inputText value="#{airplane.estimatedArrivalTime}"/>
 				</p:column>
 				<p:column headerText="Action">
-					<p:commandButton value="Set Airplane" action="#{airportBean.store(airplane)}" update="airplaneTableForm runwayTableForm" />					
+					<p:commandButton value="Set Airplane" action="#{airportBean.update(airplane)}" update="airplaneTableForm runwayTableForm" />		
 				</p:column>	
 			</p:dataTable>
 		</p:panel>
-		
 	</h:form>
 	<p/>
 	<h:form id="runwayTableForm">
 		<p:panel header="Runways">
-			<p:dataTable value="#{airportBean.runway}" var="runway">
-				<p:column headerText="Runway">
-					<h:outputText value="#{runway}" />
+			<p:dataTable value="#{airportBean.runways}" var="runway">
+				<p:column headerText="ID">
+					<h:outputText value="#{runway.id}" />
 				</p:column>
 				<p:column headerText="Runway Name">
-					<!-- <h:outputText value="#{runways.name}" />  -->
+					<h:outputText value="#{runway.name}" />  
 				</p:column>
 				<p:column headerText="Locked">
-					<!-- <h:outputText value="#{runways.isLocked}" />  -->
+					<h:outputText value="#{runway.isLocked}" />  
 				</p:column>
 				<p:column headerText="Airplane Name">
-					<!-- <h:outputText value="#{runways.airplane.name}" />  -->
-				</p:column> -->
+					<h:outputText value="#{runway.airplane.name}" />
+				</p:column>
 			</p:dataTable>
 		</p:panel>	
 	</h:form>
@@ -74,16 +67,16 @@
 		<p:panel header="ParkingLots">
 		<p:dataTable value="#{airportBean.parkingPositions}" var="parkingPosition">
 			<p:column headerText="Id">
-			
+				<h:outputText value="#{parkingPosition.id}" />
 			</p:column>
 			<p:column headerText="Locked">
-					
+				<h:outputText value="#{parkingPosition.isLocked}" />
 			</p:column>
 			<p:column headerText="Airplane">
-			
+				<h:outputText value="#{parkingPosition.airplane}" />
 			</p:column>
-			<p:column headerText="Real Astimation Time">
-			
+			<p:column headerText="Name">
+				<h:outputText value="#{parkingPosition.name}" />
 			</p:column>
 		</p:dataTable>
 		</p:panel>

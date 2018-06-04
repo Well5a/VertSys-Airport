@@ -1,16 +1,13 @@
 package com.airport.model;
 
-import javax.ejb.EJB;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import java.sql.Timestamp;
-import javax.persistence.SqlResultSetMapping;
+import javax.persistence.OneToOne;
 
-import com.airport.session.AirportEJB;
 
 @NamedQueries({
 	@NamedQuery(name="airplane.findAll", query="select a from Airplane a order by a.name"),
@@ -26,14 +23,23 @@ public class Airplane {
 	
 	private String icao;
 	
-	//@EJB
-	//private AirportEJB airportEJB;
 	
 	@ManyToOne
 	private Airline airline;
 	
-	private String runway;
-	
+	@OneToOne
+	private Runway runway;
+
+
+	public Runway getRunway() {
+		return runway;
+	}
+
+
+	public void setRunway(Runway runway) {
+		this.runway = runway;
+	}
+
 	private String name;
 	
 	private String estimatedArrivalTime = "0";
@@ -87,12 +93,5 @@ public class Airplane {
 		this.name = name;
 	}
 	
-	public void setRunway(String runway) {
-		this.runway = runway;
-	}
 	
-	public String getRunway()
-	{
-		return runway;
-	}
 }

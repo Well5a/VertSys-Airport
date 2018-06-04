@@ -28,6 +28,13 @@ public class ParkingPosition {
 	public ParkingPosition() {
 		super();
 	}
+	
+	public ParkingPosition(long id, boolean isLocked, String name) {
+		super();
+		this.id = id;
+		this.isLocked = isLocked;
+		this.name = name;
+	}
 
 	public long getId() {
 		return id;
