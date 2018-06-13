@@ -12,18 +12,64 @@
 <h:body>
 	<h1>Airport Esslingen</h1>
 
-	<h:form>
-		<p:panel header="New airplane">
-			Airplane name: <p:inputText value="#{airportBean.airplane.name}" />
-			<p/>
-			Airline: 	<p:selectOneMenu value="#{airportBean.airplane.airlineName}">
-							<f:selectItem itemLabel= "Air Berlin" itemValue="Air Berlin" />
-							<f:selectItem itemLabel= "Niki" itemValue="Niki" />
-							<f:selectItem itemLabel= "Monarch Airlines" itemValue="Monarch Airlines" />
-							<f:selectItem itemLabel= "Alitalia" itemValue="Alitalia" />
-						</p:selectOneMenu>
-			<p/>
-			<p:commandButton value="Add airplane" action="#{airportBean.store}" update="airplaneTableForm" />
+	<h:form id="controlTableForm">
+		<p:panel header="Control Airport">
+			<h:panelGrid columns="5">
+				<p:panel header="Add new airplane">
+					Airplane name: <p:inputText value="#{airportBean.airplane.name}" />
+					<p/>
+					Airline: 	<p:selectOneMenu value="#{airportBean.airplane.airlineName}">
+									<f:selectItem itemLabel= "Air Berlin" itemValue="Air Berlin" />
+									<f:selectItem itemLabel= "Niki" itemValue="Niki" />
+									<f:selectItem itemLabel= "Monarch Airlines" itemValue="Monarch Airlines" />
+									<f:selectItem itemLabel= "Alitalia" itemValue="Alitalia" />
+								</p:selectOneMenu>
+					<p/>
+					<p:commandButton value="Add airplane" action="#{airportBean.store}" update="controlTableForm airplaneTableForm" />
+				</p:panel>
+				<p:panel header="Assign runway">
+					Airplane:
+					<h:selectOneMenu value="#{airportBean.selectedAirplane}">
+						<f:selectItems value="#{airportBean.airplanes}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
+					</h:selectOneMenu>
+					<p/>
+					Runway:
+					<h:selectOneMenu value="#{airportBean.selectedRunway}">
+						<f:selectItems value="#{airportBean.freeRunways}" var="r" itemLabel="#{r.name}" itemValue="#{r.id}"/>
+					</h:selectOneMenu>
+					<p/>
+					<p:commandButton value="Set runway" action="#{airportBean.assignRunway}" update="controlTableForm airplaneTableForm runwayTableForm" />
+				</p:panel>
+				<p:panel header="Land airplane">
+					Airplane:
+					<h:selectOneMenu value="#{airportBean.landingAirplane}">
+						<f:selectItems value="#{airportBean.airplanes}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
+					</h:selectOneMenu>
+					<p/>
+					<p:commandButton value="Land airplane" action="#{airportBean.land}" update="controlTableForm airplaneTableForm runwayTableForm" />
+				</p:panel>
+				<p:panel header="Assign parking position">
+					Airplane:
+					<h:selectOneMenu value="#{airportBean.selectedParkingAirplane}">
+						<f:selectItems value="#{airportBean.airplanes}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
+					</h:selectOneMenu>
+					<p/>
+					Parking Position:
+					<h:selectOneMenu value="#{airportBean.selectedParkingPosition}">
+						<f:selectItems value="#{airportBean.freeParkingPositions}" var="p" itemLabel="#{p.name}" itemValue="#{p.id}"/>
+					</h:selectOneMenu>
+					<p/>
+					<p:commandButton value="Set parking position" action="#{airportBean.assignParkingPosition}" update="controlTableForm airplaneTableForm runwayTableForm parkingPositionTableForm" />
+				</p:panel>
+				<p:panel header="Park airplane">
+					Airplane:
+					<h:selectOneMenu value="#{airportBean.parkingAirplane}">
+						<f:selectItems value="#{airportBean.airplanes}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
+					</h:selectOneMenu>
+					<p/>
+					<p:commandButton value="Park airplane" action="#{airportBean.park}" update="controlTableForm airplaneTableForm runwayTableForm parkingPositionTableForm" />
+				</p:panel>
+			</h:panelGrid>
 		</p:panel>
 	</h:form>
 	<p/>
@@ -39,48 +85,18 @@
 				<p:column headerText="Airline">
 					<h:outputText value="#{airplane.airline.name}" />
 				</p:column>
-				<p:column headerText="Runway">
-					<h:outputText value="#{airplane.runway.name}" />
-					<!-- <p:selectOneMenu value="#{airplane.runwayName}">
-						<f:selectItem itemLabel= "north" itemValue="north" />
-						<f:selectItem itemLabel= "east" itemValue="east" />
-						<f:selectItem itemLabel= "south" itemValue="south" />
-						<f:selectItem itemLabel= "west" itemValue="west" />
-					</p:selectOneMenu>					
-					<p:inputText value="#{airplane.runwayName}" /> -->
-				</p:column>
-				
-				<!-- <p:column headerText="Estimated Arrival Time">
-					<h:outputText value="#{airplane.estimatedArrivalTime}" />
-					<p:inputText value="#{airplane.estimatedArrivalTime}"/>
-				</p:column> -->
-				<!-- <p:column headerText="Action">
-					<p:commandButton value="Set Airplane" action="#{airportBean.update(airplane)}" update="airplaneTableForm runwayTableForm" />
-				</p:column>	 -->
 			</p:dataTable>
-			<p/>
-			Airplane:
-			<h:selectOneMenu value="#{airportBean.selectedAirplane}">
-				<f:selectItems value="#{airportBean.airplanes}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
-			</h:selectOneMenu>
-			<p/>
-			Runway:
-			<h:selectOneMenu value="#{airportBean.selectedRunway}">
-				<f:selectItems value="#{airportBean.freeRunways}" var="r" itemLabel="#{r.name}" itemValue="#{r.id}"/>
-			</h:selectOneMenu>
-			<p/>
-			<p:commandButton value="Set Airplane" action="#{airportBean.update}" update="airplaneTableForm runwayTableForm" />
 		</p:panel>
 	</h:form>
 	<p/>
 	<h:form id="runwayTableForm">
 		<p:panel header="Runways">
 			<p:dataTable value="#{airportBean.runways}" var="runway">
-				<p:column headerText="ID">
-					<h:outputText value="#{runway.id}" />
-				</p:column>
 				<p:column headerText="Runway Name">
 					<h:outputText value="#{runway.name}" />  
+				</p:column>
+				<p:column headerText="ID">
+					<h:outputText value="#{runway.id}" />
 				</p:column>
 				<p:column headerText="Locked">
 					<h:outputText value="#{runway.isLocked}" />  
@@ -92,20 +108,20 @@
 		</p:panel>	
 	</h:form>
 	<p/>
-	<h:form id="ParkingLotTableForm">
-		<p:panel header="ParkingLots">
+	<h:form id="parkingPositionTableForm">
+		<p:panel header="Parking Positions">
 		<p:dataTable value="#{airportBean.parkingPositions}" var="parkingPosition">
-			<p:column headerText="Id">
+			<p:column headerText="Name">
+				<h:outputText value="#{parkingPosition.name}" />
+			</p:column>
+			<p:column headerText="ID">
 				<h:outputText value="#{parkingPosition.id}" />
 			</p:column>
 			<p:column headerText="Locked">
 				<h:outputText value="#{parkingPosition.isLocked}" />
 			</p:column>
 			<p:column headerText="Airplane">
-				<h:outputText value="#{parkingPosition.airplane}" />
-			</p:column>
-			<p:column headerText="Name">
-				<h:outputText value="#{parkingPosition.name}" />
+				<h:outputText value="#{parkingPosition.airplane.name}" />
 			</p:column>
 		</p:dataTable>
 		</p:panel>

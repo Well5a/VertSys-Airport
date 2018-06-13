@@ -27,15 +27,12 @@ public class Airplane {
 	private Airline airline;
 	
 	private String airlineName;
-	
-	@OneToOne
-	private Runway runway;
-	
-	private String runwayName;
 
 	private String name;
 	
 	private String estimatedArrivalTime = "0";
+	
+	private Status status = Status.AIRBORNE;
 	
 	public Airplane() {
 		super();
@@ -88,20 +85,18 @@ public class Airplane {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public Runway getRunway() {
-		return runway;
+	
+	public Status getStatus() {
+		return status;
 	}
 
-	public void setRunway(Runway runway) {
-		this.runway = runway;
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 
-	public String getRunwayName() {
-		return runwayName;
+	public enum Status{
+		AIRBORNE,
+		LANDING,
+		PARKING
 	}
-
-	public void setRunwayName(String runwayName) {
-		this.runwayName = runwayName;
-	}	
 }
