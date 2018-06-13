@@ -2,6 +2,7 @@ package com.airport.session;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,6 +10,7 @@ import javax.persistence.Query;
 
 import org.jboss.resteasy.spi.metadata.SetterParameter;
 
+import com.airport.model.Airline;
 import com.airport.model.Airplane;
 import com.airport.model.ParkingPosition;
 import com.airport.model.Runway;
@@ -108,6 +110,28 @@ public class AirportEJB {
 			entityManager.persist(parkingPosition);
 		} else {
 			entityManager.merge(parkingPosition);
+		}
+	}
+	
+	public Runway getRunway(long selectedRunway) {
+		return entityManager.find(Runway.class, selectedRunway);
+	}
+	
+	// -------------------------- Airline ------------------------------------
+	
+	public List<Airline> getAirlines() {
+		Query query = entityManager.createNamedQuery("airline.findAll");
+		
+		@SuppressWarnings("unchecked")
+		List<Airline> airlines = query.getResultList();
+		return airlines;
+	}
+
+	public void storeAirline(Airline airline) {
+		if (airline.getId() == 0) {
+			entityManager.persist(airline);
+		} else {
+			entityManager.merge(airline);
 		}
 	}
 }

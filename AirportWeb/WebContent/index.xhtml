@@ -14,7 +14,15 @@
 
 	<h:form>
 		<p:panel header="New airplane">
-			Airplane name: <p:inputText value="#{airportBean.airplane.name}" /><p/>
+			Airplane name: <p:inputText value="#{airportBean.airplane.name}" />
+			<p/>
+			Airline: 	<p:selectOneMenu value="#{airportBean.airplane.airlineName}">
+							<f:selectItem itemLabel= "Air Berlin" itemValue="Air Berlin" />
+							<f:selectItem itemLabel= "Niki" itemValue="Niki" />
+							<f:selectItem itemLabel= "Monarch Airlines" itemValue="Monarch Airlines" />
+							<f:selectItem itemLabel= "Alitalia" itemValue="Alitalia" />
+						</p:selectOneMenu>
+			<p/>
 			<p:commandButton value="Add airplane" action="#{airportBean.store}" update="airplaneTableForm" />
 		</p:panel>
 	</h:form>
@@ -28,19 +36,40 @@
 				<p:column headerText="ID">
 					<h:outputText value="#{airplane.id}" />
 				</p:column>
-				<p:column headerText="Select Runway">
-					<h:selectOneMenu value="#{airplane.runway}">
-						<f:selectItems value="#{airportBean.freeRunways}" var="r" itemLabel="#{r.id}" itemValue="#{r.name}"/>
-					</h:selectOneMenu>
+				<p:column headerText="Airline">
+					<h:outputText value="#{airplane.airline.name}" />
 				</p:column>
-				<p:column headerText="Estimated Arrival Time">
+				<p:column headerText="Runway">
+					<h:outputText value="#{airplane.runway.name}" />
+					<!-- <p:selectOneMenu value="#{airplane.runwayName}">
+						<f:selectItem itemLabel= "north" itemValue="north" />
+						<f:selectItem itemLabel= "east" itemValue="east" />
+						<f:selectItem itemLabel= "south" itemValue="south" />
+						<f:selectItem itemLabel= "west" itemValue="west" />
+					</p:selectOneMenu>					
+					<p:inputText value="#{airplane.runwayName}" /> -->
+				</p:column>
+				
+				<!-- <p:column headerText="Estimated Arrival Time">
 					<h:outputText value="#{airplane.estimatedArrivalTime}" />
 					<p:inputText value="#{airplane.estimatedArrivalTime}"/>
-				</p:column>
-				<p:column headerText="Action">
-					<p:commandButton value="Set Airplane" action="#{airportBean.update(airplane)}" update="airplaneTableForm runwayTableForm" />		
-				</p:column>	
+				</p:column> -->
+				<!-- <p:column headerText="Action">
+					<p:commandButton value="Set Airplane" action="#{airportBean.update(airplane)}" update="airplaneTableForm runwayTableForm" />
+				</p:column>	 -->
 			</p:dataTable>
+			<p/>
+			Airplane:
+			<h:selectOneMenu value="#{airportBean.selectedAirplane}">
+				<f:selectItems value="#{airportBean.airplanes}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
+			</h:selectOneMenu>
+			<p/>
+			Runway:
+			<h:selectOneMenu value="#{airportBean.selectedRunway}">
+				<f:selectItems value="#{airportBean.freeRunways}" var="r" itemLabel="#{r.name}" itemValue="#{r.id}"/>
+			</h:selectOneMenu>
+			<p/>
+			<p:commandButton value="Set Airplane" action="#{airportBean.update}" update="airplaneTableForm runwayTableForm" />
 		</p:panel>
 	</h:form>
 	<p/>

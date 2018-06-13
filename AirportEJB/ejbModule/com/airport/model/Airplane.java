@@ -23,43 +23,31 @@ public class Airplane {
 	
 	private String icao;
 	
-	
 	@ManyToOne
 	private Airline airline;
 	
+	private String airlineName;
+	
 	@OneToOne
 	private Runway runway;
-
-
-	public Runway getRunway() {
-		return runway;
-	}
-
-
-	public void setRunway(Runway runway) {
-		this.runway = runway;
-	}
+	
+	private String runwayName;
 
 	private String name;
 	
 	private String estimatedArrivalTime = "0";
 	
+	public Airplane() {
+		super();
+	}
+	
 	public String getEstimatedArrivalTime() {
 		return estimatedArrivalTime;
 	}
 
-
 	public void setEstimatedArrivalTime(String estimatedArrivalTime) {
-		//airportEJB.updateEAT(this.id, estimatedArrivalTime);
-		System.out.println("Hallo" + estimatedArrivalTime);
 		this.estimatedArrivalTime = estimatedArrivalTime;
 	}
-
-
-	public Airplane() {
-		super();
-	}
-
 	
 	public long getId() {
 		return id;
@@ -85,6 +73,14 @@ public class Airplane {
 		this.airline = airline;
 	}
 	
+	public String getAirlineName() {
+		return airlineName;
+	}
+
+	public void setAirlineName(String airlineName) {
+		this.airlineName = airlineName;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -92,6 +88,20 @@ public class Airplane {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
+
+	public Runway getRunway() {
+		return runway;
+	}
+
+	public void setRunway(Runway runway) {
+		this.runway = runway;
+	}
+
+	public String getRunwayName() {
+		return runwayName;
+	}
+
+	public void setRunwayName(String runwayName) {
+		this.runwayName = runwayName;
+	}	
 }

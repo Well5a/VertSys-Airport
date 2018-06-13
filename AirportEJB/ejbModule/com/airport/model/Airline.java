@@ -2,18 +2,15 @@ package com.airport.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-
+@NamedQueries({
+	@NamedQuery(name="airline.findAll", query="select a from Airline a order by a.name"),
+	@NamedQuery(name="airline.findByName", query="select a from Airline a where a.name = :name")
+})
 /**
  * Entity implementation class for Entity: Airline
  *
  */
 @Entity
-
-@NamedQueries({
-	@NamedQuery(name="airlines.findAll", query="select a from Airline a order by a.name"),
-	@NamedQuery(name="airlines.findByName", query="select a from Airline a where a.name = :name")
-})
-
 public class Airline implements Serializable {
 
 	
@@ -44,5 +41,10 @@ public class Airline implements Serializable {
 	public Airline() {
 		super();
 	}
-   
+	
+	public Airline(long Id, String name) {
+		super();
+		this.Id = Id;
+		this.name = name;
+	}
 }
