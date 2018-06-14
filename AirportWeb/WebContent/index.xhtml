@@ -46,6 +46,7 @@
 						<f:selectItems value="#{airportBean.airplanes}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
 					</h:selectOneMenu>
 					<p/>
+					<p/>
 					<p:commandButton value="Land airplane" action="#{airportBean.land}" update="controlTableForm airplaneTableForm runwayTableForm" />
 				</p:panel>
 				<p:panel header="Assign parking position">
@@ -67,6 +68,7 @@
 						<f:selectItems value="#{airportBean.airplanes}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
 					</h:selectOneMenu>
 					<p/>
+					<p/>
 					<p:commandButton value="Park airplane" action="#{airportBean.park}" update="controlTableForm airplaneTableForm runwayTableForm parkingPositionTableForm" />
 				</p:panel>
 			</h:panelGrid>
@@ -84,6 +86,9 @@
 				</p:column>
 				<p:column headerText="Airline">
 					<h:outputText value="#{airplane.airline.name}" />
+				</p:column>
+				<p:column headerText="Status">
+					<h:outputText value="#{airplane.status}" />
 				</p:column>
 			</p:dataTable>
 		</p:panel>

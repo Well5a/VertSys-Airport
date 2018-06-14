@@ -2,13 +2,10 @@ package com.airport.session;
 
 import java.util.List;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.jboss.resteasy.spi.metadata.SetterParameter;
 
 import com.airport.model.Airline;
 import com.airport.model.Airplane;
@@ -38,16 +35,7 @@ public class AirportEJB {
 			entityManager.merge(airplane);
 		}
 	}
-	
-	/*
-	public void updateEAT(long id, String eat)	{
-		Query query = entityManager.createNamedQuery("airplane.updatebyid")
-									.setParameter("param1", id)
-									.setParameter("param2", eat);
-		query.getResultList();
-		System.out.println("id: " + id + " eat: " + eat);
-	}*/
-	
+		
 	// -------------------------- Runways ------------------------------------
 	@SuppressWarnings("unchecked")
 	public List<Runway> getRunways() {

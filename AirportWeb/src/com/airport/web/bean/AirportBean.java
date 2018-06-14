@@ -2,7 +2,6 @@ package com.airport.web.bean;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
@@ -32,32 +31,23 @@ public class AirportBean implements Serializable {
 	private ParkingPosition parkingPosition;
 
 	
-	private long selectedRunway;
-	
-	private long selectedAirplane;
-	
+	//For SelectOneMenu
+	private long selectedRunway;	
+	private long selectedAirplane;	
 	private long selectedParkingAirplane;
-
-
-	private long landingAirplane;
-	
-	private long parkingAirplane;
-	
+	private long landingAirplane;	
+	private long parkingAirplane;	
 	private long selectedParkingPosition;
+	
 	
 	public AirportBean() {
 		System.out.println("AIRPORT: " + UUID.randomUUID());
 		runway = new Runway();
 	}
-
-	
-	
-//	System.out.println("ID:" + airplane.getId() + " Name:" + airplane.getName() + " Runway:" + airplane.getRunway() + " ETA:" + airplane.getEstimatedArrivalTime());
-//	System.out.println(this.airplane.getEstimatedArrivalTime());
+		
 	@PostConstruct
 	private void init() {
 		airplane = new Airplane();
-//		runwayName= "";
 		
 		storeRunway(new Runway(1, false, "north"));
 		storeRunway(new Runway(2, false, "west"));
@@ -79,61 +69,8 @@ public class AirportBean implements Serializable {
 		storeAirline(new Airline(400, "Alitalia"));
 	}
 	
-	public Runway getRunway() {
-		return runway;
-	}
-
-	public void setRunway(Runway runway) {
-		this.runway = runway;
-	}
 	
-	public Airline getAirline() {
-		return airline;
-	}
-	
-	public List<Airline> getAirlines() {
-		return airportEJB.getAirlines();
-	}
-	
-	public void setAirline(Airline airline) {
-		this.airline = airline;
-	}
-	
-
-	public List<Airplane> getAirplanes() {
-		return airportEJB.getAirplanes();
-	}
-	
-	public List<Runway> getRunways() {
-		return airportEJB.getRunways();
-	}
-	
-	public List<Runway> getFreeRunways() {
-		return airportEJB.getFreeRunways();
-	}
-		
-	public List<ParkingPosition> getParkingPositions() {
-		return airportEJB.getParkingPositions();
-	}
-	
-	public List<ParkingPosition> getFreeParkingPositions() {
-		return airportEJB.getFreeParkingPositions();
-	}
-	
-	public Airplane getAirplane() {
-		return airplane;
-	}
-	
-
-	public long getSelectedParkingAirplane() {
-		return selectedParkingAirplane;
-	}
-
-
-
-	public void setSelectedParkingAirplane(long selectedParkingAirplane) {
-		this.selectedParkingAirplane = selectedParkingAirplane;
-	}
+	// -------------------------- Store Methods ------------------------------------
 	
 	public void store() {
 		String name = airplane.getAirlineName();
@@ -158,6 +95,11 @@ public class AirportBean implements Serializable {
 		airplane = new Airplane();
 	}
 	
+	public void storeAirline(Airline airline) {
+		airportEJB.storeAirline(airline);
+		System.out.println("Store Airline: " + airline.getName());
+	}
+	
 	public void storeRunway(Runway runway) {
 		airportEJB.storeRunway(runway);
 		System.out.println("Store Runway: " + runway.getName());
@@ -168,19 +110,62 @@ public class AirportBean implements Serializable {
 		System.out.println("Store ParkingPosition: " + parkingPosition.getName());
 	}
 	
-	public void storeAirline(Airline airline) {
-		airportEJB.storeAirline(airline);
-		System.out.println("Store Airline: " + airline.getName());
-	}
-	
 
+	// -------------------------- Airport Control Methods ------------------------------------
+	
 	public void assignRunway() {
 		Runway runway = runwayById(selectedRunway);
 		runway.setAirplane(airplaneById(selectedAirplane));
 		runway.setIsLocked(true);
 		
 		airportEJB.storeRunway(runway);
+	}	
+	
+	public void land() {
+		Airplane airplane = airplaneById(landingAirplane);
+		airplane.setStatus(Status.LANDING);
+		
+		airportEJB.store(airplane);
 	}
+	
+	public void assignParkingPosition() {		
+		ParkingPosition parkingPosition = parkingPositionById(selectedParkingPosition);		
+		parkingPosition.setIsLocked(true);
+		parkingPosition.setAirplane(airplaneById(selectedParkingAirplane));			
+		
+		airportEJB.storeParkingPosition(parkingPosition);
+	}
+	
+	public void park() {
+		Airplane airplane = airplaneById(parkingAirplane);
+		List<Runway> runways = airportEJB.getRunways();
+		Runway runway = new Runway();
+		Iterator<Runway> runwayIter = runways.iterator();
+		
+		while (runwayIter.hasNext()) {
+			runway = runwayIter.next();
+			if(runway.getAirplane() != null && 
+					runway.getAirplane().getId() == parkingAirplane)
+				break;
+		}
+		runway.setIsLocked(false);
+		runway.setAirplane(null);
+		airportEJB.storeRunway(runway);
+		
+		airplane.setStatus(Status.PARKING);
+		airportEJB.store(airplane);
+	}
+	/*
+	public void releaseParkingPosition() {
+		ParkingPosition pPos = parkingPositonById(releasingParkingPosition);
+		pPos.setIsLocked(false);
+		airportEJB.storeParkingPosition(pPos);
+	}*/
+	
+
+	
+	// -------------------------- Get Methods by ID ------------------------------------
+	
 	private Runway runwayById(long runwayId) {
 		List<Runway> runways = getFreeRunways();
 		Iterator<Runway> runwayIter = runways.iterator();
@@ -224,54 +209,71 @@ public class AirportBean implements Serializable {
 		return null;
 	}
 	
-	public void land() {
-		Airplane airplane = airplaneById(landingAirplane);
-		airplane.setStatus(Status.LANDING);
-		airportEJB.store(airplane);
+	
+	// -------------------------- Getters and Setters ------------------------------------
+	
+	//Airplane
+	public Airplane getAirplane() {
+		return airplane;
+	}
+	public void setAirplane(Airplane airplane) {
+		this.airplane = airplane;
+	}
+	public List<Airplane> getAirplanes() {
+		return airportEJB.getAirplanes();
 	}
 	
-	public void park() {
-		Airplane airplane = airplaneById(parkingAirplane);
-		List<Runway> runways = airportEJB.getRunways();
-		Runway runway = new Runway();
-		Iterator<Runway> runwayIter = runways.iterator();
-		
-		while (runwayIter.hasNext()) {
-			runway = runwayIter.next();
-			if(runway.getAirplane() != null && 
-					runway.getAirplane().getId() == parkingAirplane)
-				break;
-		}
-		runway.setIsLocked(false);
-		runway.setAirplane(null);
-		airportEJB.storeRunway(runway);
-		
-		airplane.setStatus(Status.PARKING);
-		airportEJB.store(airplane);
+	//Airline
+	public Airline getAirline() {
+		return airline;
 	}
-	/*
-	public void releaseParkingPosition() {
-		ParkingPosition pPos = parkingPositonById(releasingParkingPosition);
-		pPos.setIsLocked(false);
-		airportEJB.storeParkingPosition(pPos);
-	}*/
+	public void setAirline(Airline airline) {
+		this.airline = airline;
+	}	
+	public List<Airline> getAirlines() {
+		return airportEJB.getAirlines();
+	}	
 	
-	public void assignParkingPosition() {
-		
-		ParkingPosition parkingPosition = parkingPositionById(selectedParkingPosition);
-		
-		parkingPosition.setIsLocked(true);
-		parkingPosition.setAirplane(airplaneById(selectedParkingAirplane));
-				
-		airportEJB.storeParkingPosition(parkingPosition);
+	//Runway
+	public Runway getRunway() {
+		return runway;
+	}
+	public void setRunway(Runway runway) {
+		this.runway = runway;
+	}
+	public List<Runway> getRunways() {
+		return airportEJB.getRunways();
+	}	
+	public List<Runway> getFreeRunways() {
+		return airportEJB.getFreeRunways();
 	}
 	
+	//ParkingPosition	
+	public ParkingPosition getParkingPosition() {
+		return parkingPosition;
+	}
+	public void setParkingPosition(ParkingPosition parkingPosition) {
+		this.parkingPosition = parkingPosition;
+	}
+	public List<ParkingPosition> getParkingPositions() {
+		return airportEJB.getParkingPositions();
+	}	
+	public List<ParkingPosition> getFreeParkingPositions() {
+		return airportEJB.getFreeParkingPositions();
+	}
 	
+	
+	//SelectOneMenu
+	public long getSelectedParkingAirplane() {
+		return selectedParkingAirplane;
+	}
+	public void setSelectedParkingAirplane(long selectedParkingAirplane) {
+		this.selectedParkingAirplane = selectedParkingAirplane;
+	}
 
 	public long getSelectedAirplane() {
 		return selectedAirplane;
 	}
-
 	public void setSelectedAirplane(long selectedAirplane) {
 		this.selectedAirplane = selectedAirplane;
 	}
@@ -279,11 +281,9 @@ public class AirportBean implements Serializable {
 	public long getSelectedRunway() {
 		return selectedRunway;
 	}
-
 	public void setSelectedRunway(long selectedRunway) {
 		this.selectedRunway = selectedRunway;
 	}
-
 
 	public long getSelectedParkingPosition() {
 		return selectedParkingPosition;
@@ -292,27 +292,17 @@ public class AirportBean implements Serializable {
 		this.selectedParkingPosition = selectedParkingPosition;
 	}
 
-
-
 	public long getLandingAirplane() {
 		return landingAirplane;
 	}
-
-
-
 	public void setLandingAirplane(long landingAirplane) {
 		this.landingAirplane = landingAirplane;
 	}
 
-
-
 	public long getParkingAirplane() {
 		return parkingAirplane;
 	}
-
-
-
 	public void setParkingAirplane(long parkingAirplane) {
 		this.parkingAirplane = parkingAirplane;
-	}
+	}	
 }
