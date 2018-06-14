@@ -9,6 +9,7 @@ import javax.persistence.Query;
 
 import com.airport.model.Airline;
 import com.airport.model.Airplane;
+import com.airport.model.Airplane.Status;
 import com.airport.model.ParkingPosition;
 import com.airport.model.Runway;
 
@@ -34,6 +35,12 @@ public class AirportEJB {
 		} else {
 			entityManager.merge(airplane);
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Airplane> getAirplaneByStatus(Status status) {
+		Query query = entityManager.createNamedQuery("airplane.findByStatus").setParameter("status", status);
+		return query.getResultList();	
 	}
 		
 	// -------------------------- Runways ------------------------------------

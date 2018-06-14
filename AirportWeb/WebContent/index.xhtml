@@ -14,7 +14,7 @@
 
 	<h:form id="controlTableForm">
 		<p:panel header="Control Airport">
-			<h:panelGrid columns="5">
+			<h:panelGrid columns="6">
 				<p:panel header="Add new airplane">
 					Airplane name: <p:inputText value="#{airportBean.airplane.name}" />
 					<p/>
@@ -30,7 +30,7 @@
 				<p:panel header="Assign runway">
 					Airplane:
 					<h:selectOneMenu value="#{airportBean.selectedAirplane}">
-						<f:selectItems value="#{airportBean.airplanes}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
+						<f:selectItems value="#{airportBean.getAirplaneByStatus('AIRBORNE')}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
 					</h:selectOneMenu>
 					<p/>
 					Runway:
@@ -43,16 +43,15 @@
 				<p:panel header="Land airplane">
 					Airplane:
 					<h:selectOneMenu value="#{airportBean.landingAirplane}">
-						<f:selectItems value="#{airportBean.airplanes}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
+						<f:selectItems value="#{airportBean.getAirplaneByStatus('AIRBORNE')}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
 					</h:selectOneMenu>
-					<p/>
 					<p/>
 					<p:commandButton value="Land airplane" action="#{airportBean.land}" update="controlTableForm airplaneTableForm runwayTableForm" />
 				</p:panel>
 				<p:panel header="Assign parking position">
 					Airplane:
 					<h:selectOneMenu value="#{airportBean.selectedParkingAirplane}">
-						<f:selectItems value="#{airportBean.airplanes}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
+						<f:selectItems value="#{airportBean.getAirplaneByStatus('LANDING')}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
 					</h:selectOneMenu>
 					<p/>
 					Parking Position:
@@ -65,15 +64,22 @@
 				<p:panel header="Park airplane">
 					Airplane:
 					<h:selectOneMenu value="#{airportBean.parkingAirplane}">
-						<f:selectItems value="#{airportBean.airplanes}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
+						<f:selectItems value="#{airportBean.getAirplaneByStatus('LANDING')}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
 					</h:selectOneMenu>
-					<p/>
 					<p/>
 					<p:commandButton value="Park airplane" action="#{airportBean.park}" update="controlTableForm airplaneTableForm runwayTableForm parkingPositionTableForm" />
 				</p:panel>
+				<p:panel header="Start airplane">
+					Airplane:
+					<h:selectOneMenu value="#{airportBean.startingAirplane}">
+						<f:selectItems value="#{airportBean.getAirplaneByStatus('PARKING')}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
+					</h:selectOneMenu>
+					<p/>
+					<p:commandButton value="Start airplane" action="#{airportBean.start}" update="controlTableForm airplaneTableForm runwayTableForm parkingPositionTableForm" />
+				</p:panel>
 			</h:panelGrid>
 		</p:panel>
-	</h:form>
+	</h:form> 
 	<p/>
 	<h:form id="airplaneTableForm">
 		<p:panel header="Airplanes">
