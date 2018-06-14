@@ -29,6 +29,8 @@ public class AirportBean implements Serializable {
 	private Runway runway;
 
 	private ParkingPosition parkingPosition;
+	
+	private AirplaneArrivalLog airplaneArrivalLog;
 
 	
 	//For SelectOneMenu
@@ -39,6 +41,9 @@ public class AirportBean implements Serializable {
 	private long landingAirplane;	
 	private long parkingAirplane;
 	private long startingAirplane;	
+	private String estimatedArrivalTime;
+	private String estimatedArrivalTimeStart;
+	private String realArrivalTime;
 	
 	
 	public AirportBean() {
@@ -74,6 +79,11 @@ public class AirportBean implements Serializable {
 	// -------------------------- Store Methods ------------------------------------
 	
 	public void store() {
+		AirplaneArrivalLog aal = new AirplaneArrivalLog();
+		aal.setEstimatedArrivalTime(estimatedArrivalTime);
+		airportEJB.storeAirplaneArrivalLog(aal);
+		airplane.setAirplaneArrivalLog(aal);
+		
 		String name = airplane.getAirlineName();
 		System.out.println(name);
 		List<Airline> airlines = getAirlines();
@@ -87,12 +97,14 @@ public class AirportBean implements Serializable {
 				System.out.println("true");
 				break;
 			}
-		}
+		}	
 		airplane.setAirline(airline);
-				
+			
 		airportEJB.store(airplane);
-		System.out.println("Store Airplane: " + airplane.getName());
 		
+		aal.setAirplane(airplane);
+		airportEJB.storeAirplaneArrivalLog(aal);
+				
 		airplane = new Airplane();
 	}
 	
@@ -115,11 +127,25 @@ public class AirportBean implements Serializable {
 	// -------------------------- Airport Control Methods ------------------------------------
 	
 	public void assignRunway() {
-		Runway runway = runwayById(selectedRunway);
-		runway.setAirplane(airplaneById(selectedAirplane));
+		//Check if another runway has this airplane already assigned
+		Runway otherRunway = runwayByPlane(selectedAirplane);
+		if(otherRunway != null) {
+			otherRunway.setAirplane(null);
+			otherRunway.setIsLocked(false);
+			airportEJB.storeRunway(otherRunway);
+		}
+				
+		Runway runway = runwayById(selectedRunway);		
+		Airplane airplane = airplaneById(selectedAirplane);
+		
+		runway.setAirplane(airplane);
 		runway.setIsLocked(true);
 		
 		airportEJB.storeRunway(runway);
+		
+		AirplaneArrivalLog aal = airplane.getAirplaneArrivalLog();
+		aal.setRunway(runway);
+		airportEJB.storeAirplaneArrivalLog(aal);
 	}	
 	
 	public void land() {
@@ -132,14 +158,32 @@ public class AirportBean implements Serializable {
 				
 		airplane.setStatus(Status.LANDING);		
 		airportEJB.store(airplane);
+		
+		AirplaneArrivalLog aal = airplane.getAirplaneArrivalLog();
+		aal.setRealArrivalTime(realArrivalTime);
+		airportEJB.storeAirplaneArrivalLog(aal);
 	}
 	
-	public void assignParkingPosition() {		
+	public void assignParkingPosition() {	
+		//Check if another parking position has this airplane already assigned
+		ParkingPosition otherParkingPosition = parkingPositionByPlane(selectedParkingAirplane);
+		if(otherParkingPosition != null) {
+			otherParkingPosition.setAirplane(null);
+			otherParkingPosition.setIsLocked(false);
+			airportEJB.storeParkingPosition(otherParkingPosition);
+		}
+		
 		ParkingPosition parkingPosition = parkingPositionById(selectedParkingPosition);		
 		parkingPosition.setIsLocked(true);
-		parkingPosition.setAirplane(airplaneById(selectedParkingAirplane));			
+		
+		Airplane airplane = airplaneById(selectedParkingAirplane);
+		parkingPosition.setAirplane(airplane);			
 		
 		airportEJB.storeParkingPosition(parkingPosition);
+		
+		AirplaneArrivalLog aal = airplane.getAirplaneArrivalLog();
+		aal.setParkingPosition(parkingPosition);
+		airportEJB.storeAirplaneArrivalLog(aal);
 	}
 	
 	public void park() {
@@ -159,16 +203,23 @@ public class AirportBean implements Serializable {
 		airportEJB.store(airplane);
 	}
 	
-	public void start() {
+	public void start() {		
 		Airplane airplane = airplaneById(startingAirplane);
 		ParkingPosition parkingPosition = parkingPositionByPlane(startingAirplane);
 		
 		parkingPosition.setIsLocked(false);
 		parkingPosition.setAirplane(null);
 		airportEJB.storeParkingPosition(parkingPosition);	
-		
+				
 		airplane.setStatus(Status.AIRBORNE);		
 		airportEJB.store(airplane);
+		
+		AirplaneArrivalLog aal = airplane.getAirplaneArrivalLog();
+		aal.setEstimatedArrivalTime(estimatedArrivalTimeStart);
+		aal.setRealArrivalTime(null);
+		aal.setRunway(null);
+		aal.setParkingPosition(null);
+		airportEJB.storeAirplaneArrivalLog(aal);
 	}
 	
 
@@ -304,6 +355,17 @@ public class AirportBean implements Serializable {
 		return airportEJB.getFreeParkingPositions();
 	}
 	
+	//AirplaneArrivalLog	
+	public AirplaneArrivalLog getAirplaneArrivalLog() {
+		return airplaneArrivalLog;
+	}
+	public void setAirplaneArrivalLog(AirplaneArrivalLog airplaneArrivalLog) {
+		this.airplaneArrivalLog = airplaneArrivalLog;
+	}
+	public List<AirplaneArrivalLog> getAirplaneArrivalLogs() {
+		return airportEJB.getAirplaneArrivalLogs();
+	}
+	
 	
 	//SelectOneMenu
 	public long getSelectedParkingAirplane() {
@@ -353,5 +415,26 @@ public class AirportBean implements Serializable {
 	}
 	public void setStartingAirplane(long startingAirplane) {
 		this.startingAirplane = startingAirplane;
+	}
+
+	public String getEstimatedArrivalTime() {
+		return estimatedArrivalTime;
+	}
+	public void setEstimatedArrivalTime(String estimatedArrivalTime) {
+		this.estimatedArrivalTime = estimatedArrivalTime;
+	}
+
+	public String getRealArrivalTime() {
+		return realArrivalTime;
+	}
+	public void setRealArrivalTime(String realArrivalTime) {
+		this.realArrivalTime = realArrivalTime;
+	}
+
+	public String getEstimatedArrivalTimeStart() {
+		return estimatedArrivalTimeStart;
+	}
+	public void setEstimatedArrivalTimeStart(String estimatedArrivalTimeStart) {
+		this.estimatedArrivalTimeStart = estimatedArrivalTimeStart;
 	}	
 }

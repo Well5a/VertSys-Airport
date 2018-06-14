@@ -1,7 +1,5 @@
 package com.airport.model;
 
-import java.sql.Timestamp;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,9 +17,9 @@ public class AirplaneArrivalLog {
 	@GeneratedValue
 	private long id;
 
-	private Timestamp estimatedArrivalTime;
+	private String estimatedArrivalTime;
 	
-	private Timestamp realArrivalTime;
+	private String realArrivalTime;
 	
 	@OneToOne
 	private Airplane airplane;
@@ -44,19 +42,19 @@ public class AirplaneArrivalLog {
 		this.id = id;
 	}
 
-	public Timestamp getEstimatedArrivalTime() {
+	public String getEstimatedArrivalTime() {
 		return estimatedArrivalTime;
 	}
 
-	public void setEstimatedArrivalTime(Timestamp estimatedArrivalTime) {
+	public void setEstimatedArrivalTime(String estimatedArrivalTime) {
 		this.estimatedArrivalTime = estimatedArrivalTime;
 	}
 
-	public Timestamp getRealArrivalTime() {
+	public String getRealArrivalTime() {
 		return realArrivalTime;
 	}
 
-	public void setRealArrivalTime(Timestamp realArrivalTime) {
+	public void setRealArrivalTime(String realArrivalTime) {
 		this.realArrivalTime = realArrivalTime;
 	}
 	

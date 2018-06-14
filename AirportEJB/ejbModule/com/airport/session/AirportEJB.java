@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import com.airport.model.Airline;
 import com.airport.model.Airplane;
 import com.airport.model.Airplane.Status;
+import com.airport.model.AirplaneArrivalLog;
 import com.airport.model.ParkingPosition;
 import com.airport.model.Runway;
 
@@ -127,6 +128,24 @@ public class AirportEJB {
 			entityManager.persist(airline);
 		} else {
 			entityManager.merge(airline);
+		}
+	}	
+	
+	// -------------------------- Airplane Arrival Log ------------------------------------
+	
+	public List<AirplaneArrivalLog> getAirplaneArrivalLogs() {
+		Query query = entityManager.createNamedQuery("airplanearrivallog.findAll");
+		
+		@SuppressWarnings("unchecked")
+		List<AirplaneArrivalLog> aals = query.getResultList();
+		return aals;
+	}
+
+	public void storeAirplaneArrivalLog(AirplaneArrivalLog aal) {
+		if (aal.getId() == 0) {
+			entityManager.persist(aal);
+		} else {
+			entityManager.merge(aal);
 		}
 	}
 }

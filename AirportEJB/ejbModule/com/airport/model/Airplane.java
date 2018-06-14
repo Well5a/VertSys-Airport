@@ -6,11 +6,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 
 
 @NamedQueries({
 	@NamedQuery(name="airplane.findAll", query="select a from Airplane a order by a.name"),
-	@NamedQuery(name="airplane.updatebyid", query="UPDATE Airplane a SET a.estimatedArrivalTime= param1 WHERE a.id= :param2"), //, resultSetMapping = "updateResult")
 	@NamedQuery(name="airplane.findByStatus", query="select a from Airplane a where a.status = :status")
 })
 
@@ -30,22 +30,15 @@ public class Airplane {
 
 	private String name;
 	
-	private String estimatedArrivalTime = "0";
+	@OneToOne
+	private AirplaneArrivalLog airplaneArrivalLog;
 	
 	private Status status = Status.AIRBORNE;
 	
 	public Airplane() {
 		super();
 	}
-	
-	public String getEstimatedArrivalTime() {
-		return estimatedArrivalTime;
-	}
-
-	public void setEstimatedArrivalTime(String estimatedArrivalTime) {
-		this.estimatedArrivalTime = estimatedArrivalTime;
-	}
-	
+		
 	public long getId() {
 		return id;
 	}
@@ -93,7 +86,16 @@ public class Airplane {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
+	
+	public AirplaneArrivalLog getAirplaneArrivalLog() {
+		return airplaneArrivalLog;
+	}
 
+	public void setAirplaneArrivalLog(AirplaneArrivalLog airplaneArrivalLog) {
+		this.airplaneArrivalLog = airplaneArrivalLog;
+	}
+	
+	
 	public enum Status{
 		AIRBORNE,
 		LANDING,

@@ -25,7 +25,9 @@
 									<f:selectItem itemLabel= "Alitalia" itemValue="Alitalia" />
 								</p:selectOneMenu>
 					<p/>
-					<p:commandButton value="Add airplane" action="#{airportBean.store}" update="controlTableForm airplaneTableForm" />
+					Estimated Arrival Time: <p:inputText value="#{airportBean.estimatedArrivalTime}" />
+					<p/>
+					<p:commandButton value="Add airplane" action="#{airportBean.store}" update="controlTableForm airplaneTableForm arrivalLogTableForm" />
 				</p:panel>
 				<p:panel header="Assign runway">
 					Airplane:
@@ -38,7 +40,7 @@
 						<f:selectItems value="#{airportBean.freeRunways}" var="r" itemLabel="#{r.name}" itemValue="#{r.id}"/>
 					</h:selectOneMenu>
 					<p/>
-					<p:commandButton value="Set runway" action="#{airportBean.assignRunway}" update="controlTableForm airplaneTableForm runwayTableForm" />
+					<p:commandButton value="Set runway" action="#{airportBean.assignRunway}" update="controlTableForm airplaneTableForm runwayTableForm arrivalLogTableForm" />
 				</p:panel>
 				<p:panel header="Land airplane">
 					Airplane:
@@ -46,7 +48,9 @@
 						<f:selectItems value="#{airportBean.getAirplaneByStatus('AIRBORNE')}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
 					</h:selectOneMenu>
 					<p/>
-					<p:commandButton value="Land airplane" action="#{airportBean.land}" update="controlTableForm airplaneTableForm runwayTableForm" />
+					Real Arrival Time: <p:inputText value="#{airportBean.realArrivalTime}" />
+					<p/>
+					<p:commandButton value="Land airplane" action="#{airportBean.land}" update="controlTableForm airplaneTableForm runwayTableForm arrivalLogTableForm" />
 				</p:panel>
 				<p:panel header="Assign parking position">
 					Airplane:
@@ -59,7 +63,7 @@
 						<f:selectItems value="#{airportBean.freeParkingPositions}" var="p" itemLabel="#{p.name}" itemValue="#{p.id}"/>
 					</h:selectOneMenu>
 					<p/>
-					<p:commandButton value="Set parking position" action="#{airportBean.assignParkingPosition}" update="controlTableForm airplaneTableForm runwayTableForm parkingPositionTableForm" />
+					<p:commandButton value="Set parking position" action="#{airportBean.assignParkingPosition}" update="controlTableForm airplaneTableForm runwayTableForm parkingPositionTableForm arrivalLogTableForm" />
 				</p:panel>
 				<p:panel header="Park airplane">
 					Airplane:
@@ -67,7 +71,7 @@
 						<f:selectItems value="#{airportBean.getAirplaneByStatus('LANDING')}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
 					</h:selectOneMenu>
 					<p/>
-					<p:commandButton value="Park airplane" action="#{airportBean.park}" update="controlTableForm airplaneTableForm runwayTableForm parkingPositionTableForm" />
+					<p:commandButton value="Park airplane" action="#{airportBean.park}" update="controlTableForm airplaneTableForm runwayTableForm parkingPositionTableForm arrivalLogTableForm" />
 				</p:panel>
 				<p:panel header="Start airplane">
 					Airplane:
@@ -75,7 +79,9 @@
 						<f:selectItems value="#{airportBean.getAirplaneByStatus('PARKING')}" var="a" itemLabel="#{a.name}" itemValue="#{a.id}"/>
 					</h:selectOneMenu>
 					<p/>
-					<p:commandButton value="Start airplane" action="#{airportBean.start}" update="controlTableForm airplaneTableForm runwayTableForm parkingPositionTableForm" />
+					Estimated Arrival Time: <p:inputText value="#{airportBean.estimatedArrivalTimeStart}" />
+					<p/>
+					<p:commandButton value="Start airplane" action="#{airportBean.start}" update="controlTableForm airplaneTableForm runwayTableForm parkingPositionTableForm arrivalLogTableForm" />
 				</p:panel>
 			</h:panelGrid>
 		</p:panel>
@@ -84,7 +90,7 @@
 	<h:form id="airplaneTableForm">
 		<p:panel header="Airplanes">
 			<p:dataTable value="#{airportBean.airplanes}" var="airplane">
-				<p:column headerText="Airplanes">
+				<p:column headerText="Name">
 					<h:outputText value="#{airplane.name}" />
 				</p:column>	
 				<p:column headerText="ID">
@@ -103,7 +109,7 @@
 	<h:form id="runwayTableForm">
 		<p:panel header="Runways">
 			<p:dataTable value="#{airportBean.runways}" var="runway">
-				<p:column headerText="Runway Name">
+				<p:column headerText="Name">
 					<h:outputText value="#{runway.name}" />  
 				</p:column>
 				<p:column headerText="ID">
@@ -131,8 +137,29 @@
 			<p:column headerText="Locked">
 				<h:outputText value="#{parkingPosition.isLocked}" />
 			</p:column>
-			<p:column headerText="Airplane">
+			<p:column headerText="Airplane Name">
 				<h:outputText value="#{parkingPosition.airplane.name}" />
+			</p:column>
+		</p:dataTable>
+		</p:panel>
+	</h:form>
+	<h:form id="arrivalLogTableForm">
+		<p:panel header="Airplane Arrival Log">
+		<p:dataTable value="#{airportBean.airplaneArrivalLogs}" var="arrivalLog">
+			<p:column headerText="Airplane">
+				<h:outputText value="#{arrivalLog.airplane.name}" />
+			</p:column>
+			<p:column headerText="Estimated Arrival Time">
+				<h:outputText value="#{arrivalLog.estimatedArrivalTime}" />
+			</p:column>
+			<p:column headerText="Real Arrival Time">
+				<h:outputText value="#{arrivalLog.realArrivalTime}" />
+			</p:column>
+			<p:column headerText="Runway">
+				<h:outputText value="#{arrivalLog.runway.name}" />
+			</p:column>
+			<p:column headerText="Parking Position">
+				<h:outputText value="#{arrivalLog.parkingPosition.name}" />
 			</p:column>
 		</p:dataTable>
 		</p:panel>
